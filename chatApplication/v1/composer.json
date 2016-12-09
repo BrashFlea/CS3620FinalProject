@@ -1,0 +1,21 @@
+{
+    "name": "jm47892/chatapplication",
+    "description": "Final project for cs3620. RESTful chat application.",
+    "type": "project",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Jonathan",
+            "email": "jonathanmirabile@mail.weber.edu"
+        }
+    ],
+    "minimum-stability": "stable",
+	"autoload": {
+		"psr-4": {
+			"ChatApplication\\":"src/"
+		}
+	},
+    "require": {
+        "cboden/ratchet": "^0.3.5"
+    }
+}
