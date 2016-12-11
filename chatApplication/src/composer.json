@@ -12,7 +12,7 @@
     "minimum-stability": "stable",
 	"autoload": {
 		"psr-4": {
-			"ChatApplication\\":"src/"
+			"MyApp\\":"/src"
 		}
 	},
     "require": {
