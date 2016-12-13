@@ -12,14 +12,18 @@ use Ratchet\WebSocket\WsServer;
 use MyApp\Chat;
 
     require dirname(__DIR__) . '/vendor/autoload.php';
-
-    $server = IoServer::factory(
+    //Web connect (Doesn't work on icarus)
+    /*$server = IoServer::factory(
         new HttpServer(
             new WsServer(
                 new Chat()
             )
         ),
-        8008 //8080 was taken
-    );
+        8081, //8080 was taken
+        '127.0.0.1'
 
+    );*/
+
+    //Working telnet connection
+    $server = IoServer::factory(new Chat, 8081, '127.0.0.1');
     $server->run();

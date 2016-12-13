@@ -16,7 +16,7 @@
         $("#messages").animate({ scrollTop: $('#messages')[0].scrollHeight}, 1000);
     }
 
-    var conn = new WebSocket('ws://localhost:8008');
+    var conn = new WebSocket('ws://127.0.0.1:8081');
     conn.onopen = function(e) {
         console.log("Connection established!");
     };

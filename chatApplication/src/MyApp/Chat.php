@@ -24,8 +24,8 @@ class Chat implements MessageComponentInterface {
 
     public function onMessage(ConnectionInterface $from, $msg) {
         $numRecv = count($this->clients) - 1;
-        echo sprintf('Connection %d sending message "%s" to %d other connection%s' . "\n"
-            , $from->resourceId, $msg, $numRecv, $numRecv == 1 ? '' : 's');
+        echo sprintf('Connection %d sending message "%s" to %d other connection%s '
+            , $from->resourceId, preg_replace( "/\r|\n/", "", $msg), $numRecv, $numRecv == 1 ? '' . "\n" : 's' . "\n");
 
         foreach ($this->clients as $key => $client) {
             if ($from !== $client) {
@@ -35,7 +35,7 @@ class Chat implements MessageComponentInterface {
         }
         // Send a message to a known resourceId (in this example the sender)
         $client = $this->clients[$from->resourceId];
-        $client->send("Message successfully sent to $numRecv users.");
+        $client->send("Message successfully sent to $numRecv users. \n");
     }
 
     public function onClose(ConnectionInterface $conn) {
