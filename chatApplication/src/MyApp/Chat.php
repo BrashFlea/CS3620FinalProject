@@ -8,6 +8,10 @@
 namespace MyApp;
 use Ratchet\MessageComponentInterface;
 use Ratchet\ConnectionInterface;
+use \PDO;
+use \PDOException;
+
+
 
 class Chat implements MessageComponentInterface {
     protected $clients;
@@ -23,9 +27,37 @@ class Chat implements MessageComponentInterface {
     }
 
     public function onMessage(ConnectionInterface $from, $msg) {
+        //DB
+        $host = "127.0.0.1"; //or IP address 127.0.0.1
+        $dbname = "W01247892";
+        $username = "W01247892";
+        $password = "Jonathancs!";
+
+        //Connect to database
+        try {
+            $dbh = new PDO("mysql:host=$host;dbname=$dbname", $username, $password);
+        } catch (PDOException $e) {
+            echo "Exception occurred. Please try again.";
+            echo $e->getMessage();
+            die();
+        }
+
+        $stmtInsertChat= $dbh->prepare("INSERT INTO `ChatLog` (`Mid`,`UserName`, `Message`, `LogTime`) VALUES (NULL, :UserName, :Message, :LogTime)");
+        $data[] = json_decode($msg, true);
+        $UserData = array('UserName'=>strip_tags($data[0]['user']), 'Message'=> strip_tags($data[0]['text']), 'LogTime'=>strip_tags($data[0]['time']));
+        //Store the message in the database for chatlog
+        try {
+            $stmtInsertChat->execute($UserData);
+        } catch (PDOException $exception) {
+            echo "Insert failed";
+            echo $exception->getMessage();
+            die();
+        }// End DB
+
+
         $numRecv = count($this->clients) - 1;
-        echo sprintf('Connection %d sending message "%s" to %d other connection%s '
-            , $from->resourceId, preg_replace( "/\r|\n/", "", $msg), $numRecv, $numRecv == 1 ? '' . "\n" : 's' . "\n");
+        echo sprintf('Connection %d sending message "%s" to %d other connection%s ' . "\n"
+            , $from->resourceId, $msg, $numRecv, $numRecv == 1 ? '' : 's');
 
         foreach ($this->clients as $key => $client) {
             if ($from !== $client) {
@@ -50,4 +82,4 @@ class Chat implements MessageComponentInterface {
 
         $conn->close();
     }
-}// end Chat
+}// end Chat class
